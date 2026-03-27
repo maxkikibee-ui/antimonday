@@ -350,11 +350,11 @@ const styles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000
+    zIndex: 9999
   },
   modal: {
     backgroundColor: 'var(--card-bg)',
@@ -362,7 +362,9 @@ const styles = {
     width: '90%',
     maxWidth: '600px',
     maxHeight: '90vh',
-    overflow: 'auto'
+    overflow: 'auto',
+    zIndex: 10000,
+    boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
   },
   modalHeader: {
     padding: '24px',

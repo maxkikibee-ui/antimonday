@@ -5,6 +5,7 @@ import Topbar from './components/Layout/Topbar';
 import Dashboard from './pages/Dashboard';
 import Pipeline from './pages/Pipeline';
 import Contacts from './pages/Contacts';
+import Subscriptions from './pages/Subscriptions';
 
 function AppLayout() {
   return (
@@ -18,6 +19,7 @@ function AppLayout() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/pipeline" element={<Pipeline />} />
             <Route path="/contacts" element={<Contacts />} />
+            <Route path="/subscriptions" element={<Subscriptions />} />
           </Routes>
         </div>
       </main>

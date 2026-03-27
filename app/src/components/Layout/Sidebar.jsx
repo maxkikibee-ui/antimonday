@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Columns, Users, PieChart } from 'lucide-react';
+import { LayoutDashboard, Columns, Users, PieChart, CreditCard } from 'lucide-react';
 
 const Sidebar = () => {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/pipeline', label: 'Pipeline', icon: Columns },
     { path: '/contacts', label: 'Contacts', icon: Users },
+    { path: '/subscriptions', label: 'Subscriptions', icon: CreditCard },
   ];
 
   return (

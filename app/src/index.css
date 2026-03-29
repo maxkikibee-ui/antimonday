@@ -1,21 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap');
-
 :root {
-  --bg-color: #f5f5f5;
-  --sidebar-bg: #1a1a1a;
-  --card-bg: #ffffff;
-  --text-primary: #1a1a1a;
-  --text-secondary: #6b7280;
-  --primary-color: #f97316;
-  --primary-hover: #ea580c;
-  --border-color: #e5e7eb;
+  --bg-color: #0f111a;
+  --sidebar-bg: #161925;
+  --card-bg: #1e2130;
+  --text-primary: #f0f0f5;
+  --text-secondary: #8b92a5;
+  --primary-color: #4f46e5;
+  --primary-hover: #4338ca;
+  --border-color: #2a2e3f;
   --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
   --info: #3b82f6;
 
-  font-family: 'IBM Plex Sans Thai', 'Inter', system-ui, sans-serif;
-  color-scheme: light;
+  font-family: 'Inter', system-ui, sans-serif;
+  color-scheme: dark;
 }
 
 * {
@@ -30,10 +28,21 @@ body {
   overflow: hidden;
 }
 
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+/* Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
 
 .app-container {
   display: flex;
@@ -41,6 +50,7 @@ body {
   width: 100vw;
 }
 
+/* Animations */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

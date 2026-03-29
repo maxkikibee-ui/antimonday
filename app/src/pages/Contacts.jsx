@@ -32,10 +32,6 @@ const Contacts = () => {
   return (
     <div className="animate-fade-in">
       <div style={s.header}>
-        <div>
-          <h1 style={s.title}>รายชื่อลูกค้า</h1>
-          <p style={s.subtitle}>จัดการข้อมูลลูกค้าทั้งหมด</p>
-        </div>
         <button style={s.addBtn} onClick={openAddModal}><Plus size={16} /> เพิ่มลูกค้า</button>
       </div>
 
@@ -92,7 +88,7 @@ const Contacts = () => {
 };
 
 const s = {
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' },
+  header: { display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '16px' },
   title: { fontSize: '1.4rem', fontWeight: '700', color: '#1a1a1a', marginBottom: '4px' },
   subtitle: { fontSize: '0.85rem', color: '#6b7280' },
   addBtn: { display: 'flex', alignItems: 'center', gap: '6px', padding: '10px 18px', backgroundColor: '#1a1a1a', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '0.85rem', fontWeight: '500', cursor: 'pointer', fontFamily: 'inherit' },

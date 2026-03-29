@@ -42,13 +42,6 @@ const Subscriptions = () => {
 
   return (
     <div className="animate-fade-in">
-      <div style={s.pageHeader}>
-        <div>
-          <h1 style={s.pageTitle}>ฐานข้อมูลลูกค้า</h1>
-          <p style={s.pageSubtitle}>จัดการข้อมูลสมาชิกและแผนบริการ</p>
-        </div>
-      </div>
-
       <div style={s.statsGrid}>
         <div style={s.statCard}>
           <div style={{ ...s.statIcon, backgroundColor: '#fff7ed', color: '#f97316' }}><Users size={22} /></div>

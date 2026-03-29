@@ -19,10 +19,6 @@ const Pipeline = () => {
 
   return (
     <div className="animate-fade-in">
-      <div style={s.header}>
-        <h1 style={s.title}>ไปป์ไลน์การขาย</h1>
-        <p style={s.subtitle}>ลากและวางเพื่อเปลี่ยนสถานะ Deal</p>
-      </div>
       <div style={s.board}>
         {stages.map(stage => {
           const stageDeals = deals.filter(d => d.stage === stage.id);

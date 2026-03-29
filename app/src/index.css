@@ -1,61 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@300;400;500;600;700&display=swap');
+
 :root {
-  --bg-color: #0f111a;
-  --sidebar-bg: #161925;
-  --card-bg: #1e2130;
-  --text-primary: #f0f0f5;
-  --text-secondary: #8b92a5;
-  --primary-color: #4f46e5;
-  --primary-hover: #4338ca;
-  --border-color: #2a2e3f;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
+  --bg-color: #f8f9fb;
+  --sidebar-bg: #111111;
+  --card-bg: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --primary-color: #f97316;
+  --primary-hover: #ea580c;
+  --border-color: #e5e7eb;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #2563eb;
 
-  font-family: 'Inter', system-ui, sans-serif;
-  color-scheme: dark;
+  font-family: 'IBM Plex Sans Thai', 'Inter', system-ui, -apple-system, sans-serif;
+  color-scheme: light;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
   overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-secondary);
-}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
-.app-container {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-}
+.app-container { display: flex; height: 100vh; width: 100vw; }
 
-/* Animations */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-.animate-fade-in {
-  animation: slideIn 0.3s ease forwards;
-}
+.animate-fade-in { animation: slideIn 0.25s ease forwards; }

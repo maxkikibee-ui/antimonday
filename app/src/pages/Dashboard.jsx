@@ -38,11 +38,6 @@ const Dashboard = () => {
 
   return (
     <div className="animate-fade-in">
-      <div style={s.header}>
-        <h1 style={s.title}>ภาพรวมสรุป</h1>
-        <p style={s.subtitle}>สรุปสถานะงานเบื้องต้นของลูกค้า ไปป์วิเคราะห์ธุรกิจ เชิงปริมาณและเชิงคุณค่า</p>
-      </div>
-
       <div style={s.grid}>
         {metrics.map((m, i) => (
           <div key={i} style={s.card}>
@@ -82,7 +77,7 @@ const Dashboard = () => {
       {/* Charts */}
       <div style={s.chartsGrid}>
         <div style={s.chartCard}>
-          <div style={s.chartHeader}><BarChart3 size={18} /><h3 style={s.chartTitle}>Deals by Stage</h3></div>
+          <div style={s.chartHeader}><BarChart3 size={18} /><h3 style={s.chartTitle}>สถานะ Deals ตาม Stage</h3></div>
           <div style={s.barChart}>
             {dealsByStage.map(st => (
               <div key={st.stage} style={s.barItem}>
@@ -97,7 +92,7 @@ const Dashboard = () => {
           </div>
         </div>
         <div style={s.chartCard}>
-          <div style={s.chartHeader}><Calendar size={18} /><h3 style={s.chartTitle}>Recent Activity</h3></div>
+          <div style={s.chartHeader}><Calendar size={18} /><h3 style={s.chartTitle}>กิจกรรมล่าสุด</h3></div>
           {deals.slice(0, 5).map(deal => {
             const stage = store.pipelineStages.find(st => st.id === deal.stage);
             return (
@@ -144,47 +139,44 @@ const Dashboard = () => {
 };
 
 const s = {
-  header: { marginBottom: '24px' },
-  title: { fontSize: '1.4rem', fontWeight: '700', color: '#1a1a1a', marginBottom: '6px' },
-  subtitle: { fontSize: '0.85rem', color: '#6b7280' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px' },
-  card: { backgroundColor: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' },
+  grid: { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '14px', marginBottom: '28px' },
+  card: { backgroundColor: '#fff', borderRadius: '14px', padding: '20px', border: '1px solid #f0f0f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
   cardTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' },
-  cardLabel: { fontSize: '0.8rem', color: '#6b7280', marginBottom: '6px' },
-  cardValue: { fontSize: '1.5rem', fontWeight: '700', color: '#1a1a1a' },
+  cardLabel: { fontSize: '0.78rem', color: '#9ca3af', marginBottom: '6px', fontWeight: '500' },
+  cardValue: { fontSize: '1.5rem', fontWeight: '700', color: '#111827' },
   iconWrap: { width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  cardSub: { display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#10b981' },
-  sectionHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' },
-  sectionTitle: { fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' },
-  viewAllBtn: { padding: '6px 14px', borderRadius: '6px', border: '1px solid #e5e7eb', backgroundColor: '#fff', fontSize: '0.8rem', color: '#6b7280', cursor: 'pointer', fontFamily: 'inherit' },
-  activityList: { backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', overflow: 'hidden', marginBottom: '32px' },
-  activityItem: { display: 'flex', alignItems: 'center', gap: '14px', padding: '16px 20px', borderBottom: '1px solid #f3f4f6' },
-  activityImg: { width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0 },
+  cardSub: { display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.72rem', color: '#059669' },
+  sectionHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' },
+  sectionTitle: { fontSize: '0.95rem', fontWeight: '600', color: '#111827' },
+  viewAllBtn: { padding: '5px 12px', borderRadius: '6px', border: '1px solid #f0f0f0', backgroundColor: '#fff', fontSize: '0.75rem', color: '#6b7280', cursor: 'pointer', fontFamily: 'inherit', boxShadow: '0 1px 2px rgba(0,0,0,0.04)' },
+  activityList: { backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #f0f0f0', overflow: 'hidden', marginBottom: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  activityItem: { display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', borderBottom: '1px solid #f9fafb' },
+  activityImg: { width: '36px', height: '36px', borderRadius: '50%', flexShrink: 0 },
   activityContent: { flex: 1 },
-  activityTitle: { fontSize: '0.9rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '4px' },
-  activityMeta: { fontSize: '0.8rem', color: '#6b7280' },
-  stageBadge: { padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: '600' },
-  chartsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '32px' },
-  chartCard: { backgroundColor: '#fff', borderRadius: '12px', padding: '20px', border: '1px solid #e5e7eb' },
-  chartHeader: { display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', color: '#1a1a1a' },
-  chartTitle: { fontSize: '0.95rem', fontWeight: '600' },
-  barChart: { display: 'flex', flexDirection: 'column', gap: '14px' },
-  barItem: { display: 'flex', flexDirection: 'column', gap: '6px' },
-  barLabel: { fontSize: '0.8rem', color: '#6b7280', fontWeight: '500' },
-  barWrapper: { width: '100%', height: '28px', backgroundColor: '#f3f4f6', borderRadius: '6px', overflow: 'hidden' },
-  bar: { height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px', borderRadius: '6px', minWidth: '36px', transition: 'width 0.3s' },
-  barValue: { color: '#fff', fontSize: '0.8rem', fontWeight: '600' },
-  miniActivity: { display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: '1px solid #f3f4f6' },
-  dot: { width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0 },
-  miniTitle: { fontSize: '0.85rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '2px' },
-  miniMeta: { fontSize: '0.75rem', color: '#6b7280' },
-  miniDate: { fontSize: '0.75rem', color: '#9ca3af', fontWeight: '500' },
-  tableWrap: { backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb', overflow: 'hidden' },
-  tableHead: { padding: '18px 20px', borderBottom: '1px solid #e5e7eb' },
+  activityTitle: { fontSize: '0.85rem', fontWeight: '600', color: '#111827', marginBottom: '2px' },
+  activityMeta: { fontSize: '0.75rem', color: '#9ca3af' },
+  stageBadge: { padding: '3px 10px', borderRadius: '20px', fontSize: '0.7rem', fontWeight: '600' },
+  chartsGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '28px' },
+  chartCard: { backgroundColor: '#fff', borderRadius: '14px', padding: '18px', border: '1px solid #f0f0f0', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  chartHeader: { display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: '#111827' },
+  chartTitle: { fontSize: '0.88rem', fontWeight: '600' },
+  barChart: { display: 'flex', flexDirection: 'column', gap: '12px' },
+  barItem: { display: 'flex', flexDirection: 'column', gap: '5px' },
+  barLabel: { fontSize: '0.75rem', color: '#9ca3af', fontWeight: '500' },
+  barWrapper: { width: '100%', height: '26px', backgroundColor: '#f9fafb', borderRadius: '8px', overflow: 'hidden' },
+  bar: { height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '10px', borderRadius: '8px', minWidth: '36px', transition: 'width 0.4s ease' },
+  barValue: { color: '#fff', fontSize: '0.75rem', fontWeight: '600' },
+  miniActivity: { display: 'flex', alignItems: 'center', gap: '10px', padding: '9px 0', borderBottom: '1px solid #f9fafb' },
+  dot: { width: '7px', height: '7px', borderRadius: '50%', flexShrink: 0 },
+  miniTitle: { fontSize: '0.82rem', fontWeight: '600', color: '#111827', marginBottom: '1px' },
+  miniMeta: { fontSize: '0.72rem', color: '#9ca3af' },
+  miniDate: { fontSize: '0.72rem', color: '#d1d5db', fontWeight: '500' },
+  tableWrap: { backgroundColor: '#fff', borderRadius: '14px', border: '1px solid #f0f0f0', overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)' },
+  tableHead: { padding: '16px 18px', borderBottom: '1px solid #f0f0f0' },
   table: { width: '100%', borderCollapse: 'collapse' },
-  th: { padding: '12px 20px', textAlign: 'left', borderBottom: '1px solid #e5e7eb', color: '#6b7280', fontSize: '0.8rem', fontWeight: '500' },
-  tr: { borderBottom: '1px solid #f3f4f6' },
-  td: { padding: '14px 20px', fontSize: '0.85rem', color: '#374151' },
+  th: { padding: '11px 18px', textAlign: 'left', borderBottom: '1px solid #f0f0f0', color: '#9ca3af', fontSize: '0.75rem', fontWeight: '500' },
+  tr: { borderBottom: '1px solid #f9fafb' },
+  td: { padding: '12px 18px', fontSize: '0.82rem', color: '#374151' },
 };
 
 export default Dashboard;

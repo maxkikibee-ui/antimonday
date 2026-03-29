@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { initialData as store } from '../data';
-import { TrendingUp, Users, FolderOpen, BarChart3, ArrowUpRight, Calendar } from 'lucide-react';
+import { TrendingUp, Users, FolderOpen, BarChart3, ArrowUpRight, Calendar, Activity } from 'lucide-react';
 
 const Dashboard = () => {
   const [deals, setDeals] = useState([]);
@@ -35,6 +35,28 @@ const Dashboard = () => {
     { label: 'โครงการที่กำลังทำ', value: `${activeProjects} โครงการ`, sub: `เพิ่มงานใหม่ +2 โครงการ`, icon: FolderOpen, color: '#8b5cf6', bg: '#f5f3ff' },
     { label: 'เปอร์เซ็นต์ปิดการขาย', value: `${conversionRate}%`, sub: 'เพิ่มขึ้น +5% ไตรมาสนี้', icon: BarChart3, color: '#10b981', bg: '#ecfdf5' },
   ];
+
+  // Calculate monthly revenue from deals
+  const monthlyData = useMemo(() => {
+    const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    const monthMap = {};
+    months.forEach((m, i) => { monthMap[i] = { label: m, revenue: 0, deals: 0 }; });
+    deals.forEach(d => {
+      const month = new Date(d.date).getMonth();
+      monthMap[month].revenue += d.value;
+      monthMap[month].deals += 1;
+    });
+    return Object.values(monthMap);
+  }, [deals]);
+
+  // Calculate won deals per month for second line
+  const wonMonthlyData = useMemo(() => {
+    const data = new Array(12).fill(0);
+    deals.filter(d => d.stage === 'won').forEach(d => {
+      data[new Date(d.date).getMonth()] += d.value;
+    });
+    return data;
+  }, [deals]);
 
   return (
     <div className="animate-fade-in">
@@ -72,6 +94,18 @@ const Dashboard = () => {
             </div>
           );
         })}
+      </div>
+
+      {/* Revenue Line Chart */}
+      <div style={{ ...s.chartCard, marginBottom: '28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={s.chartHeader}><Activity size={18} /><h3 style={s.chartTitle}>รายได้รายเดือน (฿)</h3></div>
+          <div style={{ display: 'flex', gap: '16px', fontSize: '0.72rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><div style={{ width: 10, height: 3, borderRadius: 2, backgroundColor: '#f97316' }}></div><span style={{ color: '#9ca3af' }}>รายได้ทั้งหมด</span></div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}><div style={{ width: 10, height: 3, borderRadius: 2, backgroundColor: '#10b981' }}></div><span style={{ color: '#9ca3af' }}>ปิดการขายได้</span></div>
+          </div>
+        </div>
+        <LineChart data={monthlyData} wonData={wonMonthlyData} shortCurrency={shortCurrency} />
       </div>
 
       {/* Charts */}
@@ -134,6 +168,66 @@ const Dashboard = () => {
           </tbody>
         </table>
       </div>
+    </div>
+  );
+};
+
+const LineChart = ({ data, wonData, shortCurrency }) => {
+  const W = 700, H = 200, PX = 40, PY = 20;
+  const chartW = W - PX * 2, chartH = H - PY * 2;
+  const revenues = data.map(d => d.revenue);
+  const maxVal = Math.max(...revenues, ...wonData, 1);
+
+  const getX = (i) => PX + (i / 11) * chartW;
+  const getY = (val) => PY + chartH - (val / maxVal) * chartH;
+
+  const linePath = revenues.map((v, i) => `${i === 0 ? 'M' : 'L'}${getX(i)},${getY(v)}`).join(' ');
+  const areaPath = `${linePath} L${getX(11)},${PY + chartH} L${getX(0)},${PY + chartH} Z`;
+  const wonPath = wonData.map((v, i) => `${i === 0 ? 'M' : 'L'}${getX(i)},${getY(v)}`).join(' ');
+
+  const gridLines = [0, 0.25, 0.5, 0.75, 1].map(p => ({
+    y: PY + chartH - p * chartH,
+    label: shortCurrency(maxVal * p)
+  }));
+
+  const [hover, setHover] = useState(null);
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <svg viewBox={`0 0 ${W} ${H + 30}`} style={{ width: '100%', height: 'auto' }}>
+        {gridLines.map((g, i) => (
+          <g key={i}>
+            <line x1={PX} y1={g.y} x2={W - PX} y2={g.y} stroke="#f3f4f6" strokeWidth="1" />
+            <text x={PX - 6} y={g.y + 3} textAnchor="end" fill="#d1d5db" fontSize="9" fontFamily="inherit">{g.label}</text>
+          </g>
+        ))}
+        <defs>
+          <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#f97316" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#f97316" stopOpacity="0.01" />
+          </linearGradient>
+        </defs>
+        <path d={areaPath} fill="url(#areaGrad)" />
+        <path d={linePath} fill="none" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={wonPath} fill="none" stroke="#10b981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="6 3" />
+        {revenues.map((v, i) => (
+          <g key={i}>
+            <circle cx={getX(i)} cy={getY(v)} r={hover === i ? 5 : 3} fill="#f97316" stroke="#fff" strokeWidth="2"
+              style={{ cursor: 'pointer', transition: 'r 0.15s' }}
+              onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)} />
+            <text x={getX(i)} y={H + 20} textAnchor="middle" fill="#9ca3af" fontSize="9" fontFamily="inherit">{data[i].label}</text>
+          </g>
+        ))}
+        {hover !== null && (
+          <g>
+            <line x1={getX(hover)} y1={PY} x2={getX(hover)} y2={PY + chartH} stroke="#f97316" strokeWidth="1" strokeDasharray="3 3" opacity="0.4" />
+            <rect x={getX(hover) - 50} y={getY(revenues[hover]) - 38} width="100" height="30" rx="6" fill="#111827" />
+            <text x={getX(hover)} y={getY(revenues[hover]) - 19} textAnchor="middle" fill="#fff" fontSize="10" fontFamily="inherit" fontWeight="600">
+              {shortCurrency(revenues[hover])} ({data[hover].deals} deals)
+            </text>
+          </g>
+        )}
+      </svg>
     </div>
   );
 };

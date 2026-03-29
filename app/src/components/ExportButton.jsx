@@ -36,9 +36,9 @@ const ExportButton = ({ onExport }) => {
 };
 
 const s = {
-  btn: { display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', color: '#374151', cursor: 'pointer', fontWeight: '500', fontSize: '0.8rem', fontFamily: 'inherit' },
-  dropdown: { position: 'absolute', top: '100%', right: 0, marginTop: '4px', backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', overflow: 'hidden', zIndex: 10, minWidth: '140px' },
-  item: { width: '100%', padding: '10px 14px', backgroundColor: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem', color: '#374151', fontFamily: 'inherit' }
+  btn: { display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 14px', backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: '500', fontSize: '0.8rem', fontFamily: 'inherit' },
+  dropdown: { position: 'absolute', top: '100%', right: 0, marginTop: '4px', backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', overflow: 'hidden', zIndex: 10, minWidth: '140px' },
+  item: { width: '100%', padding: '10px 14px', backgroundColor: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer', fontSize: '0.85rem', color: 'var(--text-primary)', fontFamily: 'inherit' }
 };
 
 export default ExportButton;

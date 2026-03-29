@@ -42,13 +42,13 @@ const FilterPanel = ({ filters, onFilterChange, onClearFilters }) => {
 };
 
 const s = {
-  panel: { backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '16px' },
+  panel: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '16px' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' },
-  title: { display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.9rem', color: '#1a1a1a' },
-  clearBtn: { display: 'flex', alignItems: 'center', gap: '3px', padding: '4px 8px', fontSize: '0.75rem', color: '#6b7280', backgroundColor: '#f3f4f6', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  title: { display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.9rem', color: 'var(--text-primary)' },
+  clearBtn: { display: 'flex', alignItems: 'center', gap: '3px', padding: '4px 8px', fontSize: '0.75rem', color: 'var(--text-secondary)', backgroundColor: 'var(--input-bg)', border: 'none', borderRadius: '4px', cursor: 'pointer' },
   section: { marginBottom: '14px' },
-  sectionTitle: { fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
-  checkbox: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', cursor: 'pointer', padding: '4px 0', color: '#374151' },
+  sectionTitle: { fontSize: '0.75rem', fontWeight: '600', color: 'var(--text-secondary)', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  checkbox: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', cursor: 'pointer', padding: '4px 0', color: 'var(--text-primary)' },
   check: { accentColor: '#f97316' }
 };
 

@@ -4,128 +4,52 @@ import { VALID_STATUSES, VALID_PLANS } from '../utils/integrationService';
 
 const FilterPanel = ({ filters, onFilterChange, onClearFilters }) => {
   const handleStatusToggle = (status) => {
-    const currentStatuses = filters.status || [];
-    const newStatuses = currentStatuses.includes(status)
-      ? currentStatuses.filter(s => s !== status)
-      : [...currentStatuses, status];
-    onFilterChange({ ...filters, status: newStatuses });
+    const cur = filters.status || [];
+    onFilterChange({ ...filters, status: cur.includes(status) ? cur.filter(s => s !== status) : [...cur, status] });
   };
-
   const handlePlanToggle = (plan) => {
-    const currentPlans = filters.plans || [];
-    const newPlans = currentPlans.includes(plan)
-      ? currentPlans.filter(p => p !== plan)
-      : [...currentPlans, plan];
-    onFilterChange({ ...filters, plans: newPlans });
+    const cur = filters.plans || [];
+    onFilterChange({ ...filters, plans: cur.includes(plan) ? cur.filter(p => p !== plan) : [...cur, plan] });
   };
-
-  const hasActiveFilters = (filters.status && filters.status.length > 0) || (filters.plans && filters.plans.length > 0);
+  const hasActive = (filters.status?.length > 0) || (filters.plans?.length > 0);
 
   return (
-    <div style={styles.panel}>
-      <div style={styles.header}>
-        <div style={styles.title}>
-          <Filter size={16} />
-          <span>ตัวกรอง</span>
-        </div>
-        {hasActiveFilters && (
-          <button style={styles.clearBtn} onClick={onClearFilters}>
-            <X size={14} />
-            ล้างตัวกรอง
-          </button>
-        )}
+    <div style={s.panel}>
+      <div style={s.header}>
+        <div style={s.title}><Filter size={15} /><span>ตัวกรอง</span></div>
+        {hasActive && <button style={s.clearBtn} onClick={onClearFilters}><X size={13} />ล้าง</button>}
       </div>
-
-      <div style={styles.section}>
-        <div style={styles.sectionTitle}>สถานะ</div>
-        <div style={styles.checkboxGroup}>
-          {VALID_STATUSES.map(status => (
-            <label key={status} style={styles.checkbox}>
-              <input
-                type="checkbox"
-                checked={(filters.status || []).includes(status)}
-                onChange={() => handleStatusToggle(status)}
-              />
-              <span>{status}</span>
-            </label>
-          ))}
-        </div>
+      <div style={s.section}>
+        <div style={s.sectionTitle}>สถานะ</div>
+        {VALID_STATUSES.map(status => (
+          <label key={status} style={s.checkbox}>
+            <input type="checkbox" checked={(filters.status || []).includes(status)} onChange={() => handleStatusToggle(status)} style={s.check} />
+            <span>{status}</span>
+          </label>
+        ))}
       </div>
-
-      <div style={styles.section}>
-        <div style={styles.sectionTitle}>แผนบริการ</div>
-        <div style={styles.checkboxGroup}>
-          {VALID_PLANS.map(plan => (
-            <label key={plan} style={styles.checkbox}>
-              <input
-                type="checkbox"
-                checked={(filters.plans || []).includes(plan)}
-                onChange={() => handlePlanToggle(plan)}
-              />
-              <span>{plan}</span>
-            </label>
-          ))}
-        </div>
+      <div style={s.section}>
+        <div style={s.sectionTitle}>แผนบริการ</div>
+        {VALID_PLANS.map(plan => (
+          <label key={plan} style={s.checkbox}>
+            <input type="checkbox" checked={(filters.plans || []).includes(plan)} onChange={() => handlePlanToggle(plan)} style={s.check} />
+            <span>{plan}</span>
+          </label>
+        ))}
       </div>
     </div>
   );
 };
 
-const styles = {
-  panel: {
-    backgroundColor: 'var(--card-bg)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '8px',
-    padding: '16px'
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '16px'
-  },
-  title: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontWeight: '600',
-    fontSize: '0.95rem'
-  },
-  clearBtn: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '4px',
-    padding: '4px 8px',
-    fontSize: '0.8rem',
-    color: 'var(--text-secondary)',
-    backgroundColor: 'transparent',
-    border: '1px solid var(--border-color)',
-    borderRadius: '4px',
-    cursor: 'pointer'
-  },
-  section: {
-    marginBottom: '16px'
-  },
-  sectionTitle: {
-    fontSize: '0.85rem',
-    fontWeight: '600',
-    color: 'var(--text-secondary)',
-    marginBottom: '8px',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em'
-  },
-  checkboxGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px'
-  },
-  checkbox: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '0.9rem',
-    cursor: 'pointer'
-  }
+const s = {
+  panel: { backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '16px' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' },
+  title: { display: 'flex', alignItems: 'center', gap: '6px', fontWeight: '600', fontSize: '0.9rem', color: '#1a1a1a' },
+  clearBtn: { display: 'flex', alignItems: 'center', gap: '3px', padding: '4px 8px', fontSize: '0.75rem', color: '#6b7280', backgroundColor: '#f3f4f6', border: 'none', borderRadius: '4px', cursor: 'pointer' },
+  section: { marginBottom: '14px' },
+  sectionTitle: { fontSize: '0.75rem', fontWeight: '600', color: '#9ca3af', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em' },
+  checkbox: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem', cursor: 'pointer', padding: '4px 0', color: '#374151' },
+  check: { accentColor: '#f97316' }
 };
 
 export default FilterPanel;

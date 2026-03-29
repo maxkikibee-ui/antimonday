@@ -4,22 +4,14 @@ import PlanBadge from './PlanBadge';
 import { Mail, Building2, Calendar } from 'lucide-react';
 
 const SubscriptionCard = ({ subscription, onClick }) => {
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('th-TH', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
     <div style={styles.card} onClick={() => onClick && onClick(subscription)}>
       <div style={styles.header}>
-        <div>
-          <div style={styles.email}>
-            <Mail size={16} style={{ color: 'var(--text-secondary)' }} />
-            {subscription.email}
-          </div>
+        <div style={{ flex: 1 }}>
+          <div style={styles.email}><Mail size={14} color="#9ca3af" />{subscription.email}</div>
           {subscription.name && <div style={styles.name}>{subscription.name}</div>}
         </div>
         <div style={styles.badges}>
@@ -27,73 +19,24 @@ const SubscriptionCard = ({ subscription, onClick }) => {
           <PlanBadge plan={subscription.servicePlan} />
         </div>
       </div>
-      
       <div style={styles.details}>
         {subscription.company && (
-          <div style={styles.detail}>
-            <Building2 size={14} style={{ color: 'var(--text-secondary)' }} />
-            {subscription.company}
-          </div>
+          <div style={styles.detail}><Building2 size={13} color="#9ca3af" />{subscription.company}</div>
         )}
-        <div style={styles.detail}>
-          <Calendar size={14} style={{ color: 'var(--text-secondary)' }} />
-          Registered: {formatDate(subscription.registrationDate)}
-        </div>
+        <div style={styles.detail}><Calendar size={13} color="#9ca3af" />ลงทะเบียน: {formatDate(subscription.registrationDate)}</div>
       </div>
     </div>
   );
 };
 
 const styles = {
-  card: {
-    backgroundColor: 'var(--card-bg)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '8px',
-    padding: '16px',
-    cursor: 'pointer',
-    transition: 'all 0.2s',
-    ':hover': {
-      borderColor: 'var(--primary-color)',
-      transform: 'translateY(-2px)'
-    }
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '12px'
-  },
-  email: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    color: 'var(--text-primary)',
-    marginBottom: '4px'
-  },
-  name: {
-    fontSize: '0.85rem',
-    color: 'var(--text-secondary)',
-    marginLeft: '24px'
-  },
-  badges: {
-    display: 'flex',
-    gap: '8px',
-    flexWrap: 'wrap'
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '6px'
-  },
-  detail: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    fontSize: '0.8rem',
-    color: 'var(--text-secondary)'
-  }
+  card: { backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '10px', padding: '16px', cursor: 'pointer', transition: 'all 0.2s' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', gap: '8px' },
+  email: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.88rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '2px' },
+  name: { fontSize: '0.8rem', color: '#6b7280', marginLeft: '20px' },
+  badges: { display: 'flex', gap: '6px', flexWrap: 'wrap', flexShrink: 0 },
+  details: { display: 'flex', flexDirection: 'column', gap: '4px' },
+  detail: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#6b7280' }
 };
 
 export default SubscriptionCard;

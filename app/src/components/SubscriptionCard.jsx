@@ -30,11 +30,11 @@ const SubscriptionCard = ({ subscription, onClick }) => {
 };
 
 const styles = {
-  card: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '16px', cursor: 'pointer', transition: 'all 0.2s' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', gap: '8px' },
-  email: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.88rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '2px' },
+  card: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '16px', cursor: 'pointer', transition: 'all 0.2s', overflow: 'hidden' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', gap: '8px', flexWrap: 'wrap' },
+  email: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '2px', wordBreak: 'break-all', minWidth: 0 },
   name: { fontSize: '0.8rem', color: 'var(--text-secondary)', marginLeft: '20px' },
-  badges: { display: 'flex', gap: '6px', flexWrap: 'wrap', flexShrink: 0 },
+  badges: { display: 'flex', gap: '4px', flexWrap: 'wrap', flexShrink: 0, maxWidth: '140px', justifyContent: 'flex-end' },
   details: { display: 'flex', flexDirection: 'column', gap: '4px' },
   detail: { display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-secondary)' }
 };

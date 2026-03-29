@@ -1,174 +1,160 @@
 import React, { useState, useEffect } from 'react';
 import { initialData as store } from '../data';
-import { Briefcase, Coins, Trophy, TrendingUp, Calendar, BarChart3 } from 'lucide-react';
+import { TrendingUp, Users, FolderOpen, BarChart3, ArrowUpRight } from 'lucide-react';
 
 const Dashboard = () => {
   const [deals, setDeals] = useState([]);
-  
+
   useEffect(() => {
     const savedDeals = localStorage.getItem('deals');
     setDeals(savedDeals ? JSON.parse(savedDeals) : store.deals);
   }, []);
 
-  const formatCurrency = (val) => new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB' }).format(val);
+  const formatCurrency = (val) => {
+    if (val >= 1000000) return `฿${(val / 1000000).toFixed(1)}M`;
+    if (val >= 1000) return `฿${(val / 1000).toFixed(0)}K`;
+    return `฿${val}`;
+  };
 
-  // Calculate metrics from current deals
-  const totalDeals = deals.length;
   const totalValue = deals.reduce((sum, d) => sum + d.value, 0);
+  const uniqueCompanies = [...new Set(deals.map(d => d.company))].length;
+  const activeProjects = deals.filter(d => d.stage !== 'won' && d.stage !== 'lost').length;
+  const totalDeals = deals.length;
   const wonDeals = deals.filter(d => d.stage === 'won').length;
   const conversionRate = totalDeals > 0 ? Math.round((wonDeals / totalDeals) * 100) : 0;
 
-  // Calculate deals by stage for chart
-  const dealsByStage = store.pipelineStages.map(stage => ({
-    stage: stage.name,
-    count: deals.filter(d => d.stage === stage.id).length,
-    color: stage.color
-  }));
-
-  const maxCount = Math.max(...dealsByStage.map(s => s.count), 1);
+  const metrics = [
+    {
+      label: 'มูลค่าไปป์ไลน์รวม',
+      value: formatCurrency(totalValue),
+      sub: `เพิ่มขึ้น 15% จากเดือนที่แล้ว`,
+      icon: TrendingUp, color: '#f97316', bg: '#fff7ed'
+    },
+    {
+      label: 'ลูกค้าปัจจุบัน',
+      value: `${uniqueCompanies} บริษัท`,
+      sub: 'ไม่มีการเปลี่ยนแปลงมาก',
+      icon: Users, color: '#1a1a1a', bg: '#f3f4f6'
+    },
+    {
+      label: 'โครงการที่กำลังทำ',
+      value: `${activeProjects} โครงการ`,
+      sub: `เพิ่มงานใหม่ +2 โครงการ`,
+      icon: FolderOpen, color: '#8b5cf6', bg: '#f5f3ff'
+    },
+    {
+      label: 'เปอร์เซ็นต์ปิดการขาย',
+      value: `${conversionRate}%`,
+      sub: `เพิ่มขึ้น +5% ไตรมาสนี้`,
+      icon: BarChart3, color: '#10b981', bg: '#ecfdf5'
+    }
+  ];
 
   return (
     <div className="animate-fade-in">
-      <div style={styles.grid}>
-        <MetricCard title="Total Deals" value={totalDeals} icon={Briefcase} color="var(--primary-color)" bg="rgba(79, 70, 229, 0.1)" />
-        <MetricCard title="Pipeline Value" value={formatCurrency(totalValue)} icon={Coins} color="var(--success)" bg="rgba(16, 185, 129, 0.1)" />
-        <MetricCard title="Deals Won" value={wonDeals} icon={Trophy} color="var(--info)" bg="rgba(59, 130, 246, 0.1)" />
-        <MetricCard title="Win Rate" value={`${conversionRate}%`} icon={TrendingUp} color="var(--warning)" bg="rgba(245, 158, 11, 0.1)" />
+      <div style={styles.header}>
+        <h1 style={styles.title}>ภาพรวมสรุป</h1>
+        <p style={styles.subtitle}>
+          สรุปสถานะงานเบื้องต้นของลูกค้า ไปป์วิเคราะห์ธุรกิจ เชิงปริมาณและเชิงคุณค่า
+        </p>
       </div>
 
-      {/* Charts Section */}
-      <div style={styles.chartsGrid}>
-        {/* Pipeline Stage Distribution */}
-        <div style={styles.chartContainer}>
-          <div style={styles.chartHeader}>
-            <BarChart3 size={20} />
-            <h3>Deals by Stage</h3>
+      <div style={styles.grid}>
+        {metrics.map((m, i) => (
+          <div key={i} style={styles.card}>
+            <div style={styles.cardTop}>
+              <div>
+                <div style={styles.cardLabel}>{m.label}</div>
+                <div style={styles.cardValue}>{m.value}</div>
+              </div>
+              <div style={{ ...styles.iconWrap, backgroundColor: m.bg }}>
+                <m.icon size={20} color={m.color} />
+              </div>
+            </div>
+            <div style={styles.cardSub}>
+              <ArrowUpRight size={12} color="#10b981" />
+              <span>{m.sub}</span>
+            </div>
           </div>
-          <div style={styles.barChart}>
-            {dealsByStage.map(stage => (
-              <div key={stage.stage} style={styles.barItem}>
-                <div style={styles.barLabel}>{stage.stage}</div>
-                <div style={styles.barWrapper}>
-                  <div 
-                    style={{
-                      ...styles.bar,
-                      width: `${(stage.count / maxCount) * 100}%`,
-                      backgroundColor: stage.color
-                    }}
-                  >
-                    <span style={styles.barValue}>{stage.count}</span>
-                  </div>
+        ))}
+      </div>
+
+      <div style={styles.sectionHeader}>
+        <h2 style={styles.sectionTitle}>ความเคลื่อนไหวล่าสุด</h2>
+        <button style={styles.viewAllBtn}>ดูทั้งหมด</button>
+      </div>
+
+      <div style={styles.activityList}>
+        {deals.slice(0, 5).map((deal) => {
+          const stage = store.pipelineStages.find(s => s.id === deal.stage);
+          return (
+            <div key={deal.id} style={styles.activityItem}>
+              <div style={styles.activityAvatar}>
+                <img
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(deal.company)}&background=f3f4f6&color=374151&size=40`}
+                  alt={deal.company}
+                  style={styles.activityImg}
+                />
+              </div>
+              <div style={styles.activityContent}>
+                <div style={styles.activityTitle}>{deal.title}</div>
+                <div style={styles.activityMeta}>
+                  บจก. {deal.company} • {deal.description || 'การประชุมรับรองสิ่งปัญหาเบื้องต้นเสร็จสมบูรณ์'}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Monthly Revenue Trend */}
-        <div style={styles.chartContainer}>
-          <div style={styles.chartHeader}>
-            <Calendar size={20} />
-            <h3>Recent Activity</h3>
-          </div>
-          <div style={styles.activityList}>
-            {deals.slice(0, 5).map(deal => {
-              const stage = store.pipelineStages.find(s => s.id === deal.stage);
-              return (
-                <div key={deal.id} style={styles.activityItem}>
-                  <div style={{...styles.activityDot, backgroundColor: stage.color}}></div>
-                  <div style={styles.activityContent}>
-                    <div style={styles.activityTitle}>{deal.title}</div>
-                    <div style={styles.activityMeta}>
-                      {deal.company} • {formatCurrency(deal.value)}
-                    </div>
-                  </div>
-                  <div style={styles.activityDate}>
-                    {new Date(deal.date).toLocaleDateString('th-TH', { month: 'short', day: 'numeric' })}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <div style={styles.tableContainer}>
-        <div style={styles.tableHeader}>
-          <h2>Recent Deals</h2>
-        </div>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>Deal Name</th>
-              <th style={styles.th}>Company</th>
-              <th style={styles.th}>Amount</th>
-              <th style={styles.th}>Status</th>
-              <th style={styles.th}>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {deals.map((deal) => {
-              const stage = store.pipelineStages.find(s => s.id === deal.stage);
-              return (
-                <tr key={deal.id} style={styles.tr}>
-                  <td style={styles.td}><strong>{deal.title}</strong></td>
-                  <td style={styles.td}>{deal.company}</td>
-                  <td style={{ ...styles.td, color: 'var(--success)' }}>{formatCurrency(deal.value)}</td>
-                  <td style={styles.td}>
-                    <span style={{ ...styles.badge, color: stage.color, backgroundColor: `${stage.color}22` }}>{stage.name}</span>
-                  </td>
-                  <td style={styles.td}>{new Date(deal.date).toLocaleDateString('th-TH')}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 
-const MetricCard = ({ title, value, icon: Icon, color, bg }) => (
-  <div style={styles.card}>
-    <div style={{ ...styles.iconWrapper, color, backgroundColor: bg }}>
-      <Icon size={24} />
-    </div>
-    <div>
-      <h3 style={styles.cardTitle}>{title}</h3>
-      <p style={styles.cardValue}>{value}</p>
-    </div>
-  </div>
-);
-
 const styles = {
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '32px' },
-  card: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '24px', display: 'flex', alignItems: 'center', gap: '16px' },
-  iconWrapper: { width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' },
-  cardTitle: { color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '4px', fontWeight: '500' },
-  cardValue: { fontSize: '1.5rem', fontWeight: '700', color: 'var(--text-primary)' },
-  chartsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '24px', marginBottom: '32px' },
-  chartContainer: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '24px' },
-  chartHeader: { display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', color: 'var(--text-primary)', fontWeight: '600' },
-  barChart: { display: 'flex', flexDirection: 'column', gap: '16px' },
-  barItem: { display: 'flex', flexDirection: 'column', gap: '8px' },
-  barLabel: { fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '500' },
-  barWrapper: { width: '100%', height: '32px', backgroundColor: 'var(--bg-color)', borderRadius: '6px', overflow: 'hidden' },
-  bar: { height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '12px', borderRadius: '6px', transition: 'width 0.3s ease', minWidth: '40px' },
-  barValue: { color: 'white', fontSize: '0.85rem', fontWeight: '600' },
-  activityList: { display: 'flex', flexDirection: 'column', gap: '16px' },
-  activityItem: { display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', backgroundColor: 'var(--bg-color)', borderRadius: '8px' },
-  activityDot: { width: '8px', height: '8px', borderRadius: '50%', flexShrink: 0 },
+  header: { marginBottom: '24px' },
+  title: { fontSize: '1.4rem', fontWeight: '700', color: '#1a1a1a', marginBottom: '6px' },
+  subtitle: { fontSize: '0.85rem', color: '#6b7280' },
+  grid: {
+    display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '32px'
+  },
+  card: {
+    backgroundColor: '#fff', borderRadius: '12px', padding: '20px',
+    border: '1px solid #e5e7eb'
+  },
+  cardTop: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px'
+  },
+  cardLabel: { fontSize: '0.8rem', color: '#6b7280', marginBottom: '6px' },
+  cardValue: { fontSize: '1.5rem', fontWeight: '700', color: '#1a1a1a' },
+  iconWrap: {
+    width: '40px', height: '40px', borderRadius: '10px',
+    display: 'flex', alignItems: 'center', justifyContent: 'center'
+  },
+  cardSub: {
+    display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: '#10b981'
+  },
+  sectionHeader: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px'
+  },
+  sectionTitle: { fontSize: '1.1rem', fontWeight: '600', color: '#1a1a1a' },
+  viewAllBtn: {
+    padding: '6px 14px', borderRadius: '6px', border: '1px solid #e5e7eb',
+    backgroundColor: '#fff', fontSize: '0.8rem', color: '#6b7280', cursor: 'pointer',
+    fontFamily: 'inherit'
+  },
+  activityList: {
+    backgroundColor: '#fff', borderRadius: '12px', border: '1px solid #e5e7eb',
+    overflow: 'hidden'
+  },
+  activityItem: {
+    display: 'flex', alignItems: 'center', gap: '14px', padding: '16px 20px',
+    borderBottom: '1px solid #f3f4f6'
+  },
+  activityAvatar: { flexShrink: 0 },
+  activityImg: { width: '40px', height: '40px', borderRadius: '50%' },
   activityContent: { flex: 1 },
-  activityTitle: { fontSize: '0.9rem', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '4px' },
-  activityMeta: { fontSize: '0.8rem', color: 'var(--text-secondary)' },
-  activityDate: { fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: '500' },
-  tableContainer: { backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)', borderRadius: '12px', overflow: 'hidden' },
-  tableHeader: { padding: '20px 24px', borderBottom: '1px solid var(--border-color)' },
-  table: { width: '100%', borderCollapse: 'collapse' },
-  th: { padding: '16px 24px', textAlign: 'left', borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em' },
-  tr: { borderBottom: '1px solid var(--border-color)' },
-  td: { padding: '16px 24px', fontSize: '0.95rem' },
-  badge: { padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: '600' },
+  activityTitle: { fontSize: '0.9rem', fontWeight: '600', color: '#1a1a1a', marginBottom: '4px' },
+  activityMeta: { fontSize: '0.8rem', color: '#6b7280' }
 };
 
 export default Dashboard;

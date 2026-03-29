@@ -29,7 +29,7 @@ function AppLayout() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/antimonday">
       <AppLayout />
     </BrowserRouter>
   );

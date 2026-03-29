@@ -4,9 +4,9 @@ import { LayoutDashboard, Users, Columns, CreditCard, Settings } from 'lucide-re
 
 const Sidebar = () => {
   const navItems = [
-    { path: '/dashboard', label: 'การขาย แผนที่ลูกค้า', icon: LayoutDashboard },
-    { path: '/contacts', label: 'จดหมายข่าว/พลาซ่า', icon: Users },
-    { path: '/pipeline', label: 'ไปป์ไลน์/พลาซ่า', icon: Columns },
+    { path: '/dashboard', label: 'ภาพรวมการขาย', icon: LayoutDashboard },
+    { path: '/contacts', label: 'รายชื่อลูกค้า', icon: Users },
+    { path: '/pipeline', label: 'ไปป์ไลน์การขาย', icon: Columns },
     { path: '/subscriptions', label: 'ฐานข้อมูลลูกค้า', icon: CreditCard },
   ];
 
